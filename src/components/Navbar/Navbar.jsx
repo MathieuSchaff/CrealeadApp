@@ -5,17 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Login from "../../features/login/LoginFormik";
-import { useAppSelector } from "../../app/hooks";
-import { logout, selectCurentTokenAuth } from "../../features/auth/authSlice";
-import { useAppDispatch } from "../../app/hooks";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const userToken = useAppSelector(selectCurentTokenAuth);
-  const dispatch = useAppDispatch();
-
-  const logoutUser = () => {
-    dispatch(logout());
-  };
+  const userToken = false;
+  const logoutUser = () => {};
   const handleToogle = () => {
     setIsOpen(!isOpen);
   };
