@@ -24,27 +24,25 @@ function HomePageTodos() {
   } = useQuery("todos", async () => Coopernet.getTasks(), {
     initialData: [],
   });
-
-  if (todos.length === 0)
-    return (
-      <Badge colorScheme="green" p="4" m="4" borderRadius="lg">
-        Pas de todo.
-      </Badge>
-    );
+  console.log("todos", todos);
+  // useEffect(() => {
+  //   const todos1 = todos.filter((todo) => todo.isValidate === "0");
+  //   const todos2 = todos.filter((todo) => todo.isValidate === "1");
+  //   setSortedTodos([todos1, todos2]);
+  //   console.log(sortedTodos);
+  // }, [sortedTodos, todos]);
 
   return (
     <VStack alignItems="center" mt={2}>
       <TodoForm />
+      {todos.length === 0 ? (
+        <Badge colorScheme="green" p="4" m="4" borderRadius="lg">
+          Pas de todo.
+        </Badge>
+      ) : null}
       {error && <Text> An error occured</Text>}
       {isLoading && <Text>Chargement ... </Text>}
-      {/* {todos.length > 0 && (
-        <VStack {...vStackProps}>
-          {todos.map((todo, i) => (
-            <TodoListItem todo={todo} indexKey={Number(todo.uid) + i} />
-          ))}
-        </VStack>
-      )} */}
-      <div>totos</div>
+
       {todos.length > 0 && (
         <VStack {...vStackProps}>
           <Text>Faites</Text>
@@ -55,21 +53,18 @@ function HomePageTodos() {
             ))}
         </VStack>
       )}
+      {todos.length > 0 && (
+        <VStack {...vStackProps}>
+          <Text>A faire</Text>
+          {todos
+            .filter((todo) => todo.isValidate === "0")
+            .map((todo, i) => (
+              <TodoListItem todo={todo} indexKey={todo.id} />
+            ))}
+        </VStack>
+      )}
     </VStack>
   );
 }
 
 export default HomePageTodos;
-
-// {
-//   sortedTodos.length > 0 && (
-//     <VStack {...vStackProps}>
-//       <Text>A faire</Text>
-//       {sortedTodos
-//         .filter((todo) => todo.isValidate === "0")
-//         .map((todo, i) => (
-//           <TodoListItem todo={todo} indexKey={Number(todo.uid) + i} />
-//         ))}
-//     </VStack>
-//   );
-// }

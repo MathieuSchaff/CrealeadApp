@@ -19,13 +19,11 @@ export const TodoListItem = ({
   };
 
   const queryClient = useQueryClient();
-
   const { mutate: setCheck } = useMutation(Coopernet.updateTask, {
     onSuccess: () => queryClient.invalidateQueries("todos"),
   });
   const handleOnchangeCheck = async () => {
-    console.log(todo.isValidate);
-    const changedChecked = todo.isValidate == "1" ? "0" : "1";
+    const changedChecked = todo.isValidate === "1" ? "0" : "1";
     setCheck({
       ...todo,
       isValidate: changedChecked,
@@ -34,10 +32,17 @@ export const TodoListItem = ({
   const { mutate: deleteTodo } = useMutation(Coopernet.deleteTask, {
     onSuccess: () => queryClient.invalidateQueries("todos"),
   });
+
   return (
     <HStack key={indexKey}>
-      <Checkbox colorScheme="teal" onChange={handleOnchangeCheck} />
+      <Checkbox
+        colorScheme="teal"
+        isChecked={parseInt(todo.isValidate)}
+        onChange={handleOnchangeCheck}
+      />
+      <Text>{todo.label}</Text>
       <Text>{todo.description}</Text>
+      <Text>{todo.ended}</Text>
       <Spacer />
       <UpdateTodo todo={todo} updateTodo={editTodo} />
       <IconButton onClick={() => deleteTodo(todo.id)} {...buttonProps} />

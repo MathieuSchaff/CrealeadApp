@@ -168,6 +168,7 @@ class Coopernet {
         description: task.description,
         ended: task.ended,
         order: order,
+        isValidate: "0",
       }),
       headers: {
         Accept: "application/json; charset=UTF-8",
