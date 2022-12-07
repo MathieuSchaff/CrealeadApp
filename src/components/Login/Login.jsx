@@ -19,7 +19,7 @@ const initialValues = {
   password: "",
 };
 // schaff.mathieu
-const Login = ({ handleToogle }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [errLogin, setErrLogin] = useState(false);
   const submitButton = async (values, helpers) => {
@@ -27,7 +27,6 @@ const Login = ({ handleToogle }) => {
       Coopernet.setUsername(values.username);
       Coopernet.setPassword(values.password);
       await Coopernet.setOAuthToken();
-      console.log(Coopernet.oauth);
       if (JSON.stringify(Coopernet.oauth) === "{}") {
         throw new Error("Username or Password incorrect");
       }

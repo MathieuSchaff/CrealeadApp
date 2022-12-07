@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Input,
@@ -45,7 +45,6 @@ export const TodoForm = () => {
     setNewTodo({ ...newTodo, description: e.target.value });
   };
   const handleDate = (e) => {
-    console.log(e.target.value);
     setNewTodo({ ...newTodo, ended: e.target.value });
   };
   const handleLabel = (e) => {

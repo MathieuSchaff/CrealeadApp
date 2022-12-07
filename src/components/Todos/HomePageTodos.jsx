@@ -4,7 +4,7 @@ import Coopernet from "../../utils/Coopernet";
 import { Badge, StackDivider, Text, VStack, Flex } from "@chakra-ui/react";
 import { TodoListItem } from "./TodoListItem";
 import { TodoForm } from "./TodoForm";
-import { useQuery, useMutation } from "react-query";
+import { useQuery } from "react-query";
 function HomePageTodos() {
   const vStackProps = {
     p: "4",

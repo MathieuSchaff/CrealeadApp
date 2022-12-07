@@ -1,5 +1,4 @@
 import "./App.css";
-// import Footer from "./components/Footer/Footer";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";

@@ -53,7 +53,6 @@ function UpdateTodo({ todo }) {
     modifyTodo({ ...body, description: e.target.value });
   };
   const handleDate = (e) => {
-    console.log(e.target.value);
     modifyTodo({ ...body, ended: e.target.value });
   };
   const handleLabel = (e) => {
