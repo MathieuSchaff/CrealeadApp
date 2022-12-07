@@ -1,40 +1,32 @@
-import { useState } from "react";
-import "./Navbar.scss";
-import iconArgentBank from "../../assets/img/argentBankLogo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import Login from "../../features/login/LoginFormik";
-
+import { useNavigate } from "react-router-dom";
+import { Heading, Box, Button } from "@chakra-ui/react";
+import Coopernet from "../../utils/Coopernet";
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const userToken = false;
-  const logoutUser = () => {};
-  const handleToogle = () => {
-    setIsOpen(!isOpen);
+  const navigate = useNavigate();
+  const logoutUser = () => {
+    Coopernet.oauth = {};
+    navigate("/login");
   };
-
+  const token =
+    Coopernet.oauth.access_token ?? JSON.parse(localStorage.getItem("token"));
   return (
-    <nav className="main-nav">
-      <Link className="main-nav-logo" to="/">
-        <img
-          className="main-nav-logo-image"
-          src={iconArgentBank}
-          alt="Argent Bank Logo"
-        />
-        <h1 className="sr-only">Argent Bank</h1>
-      </Link>
-      <div>
-        {isOpen && <Login handleToogle={handleToogle} />}
-        {!userToken && (
-          <button className="main-nav-item" onClick={() => handleToogle()}>
-            <FontAwesomeIcon icon={faCircleUser} />
-            Sign In
-          </button>
-        )}
-        {userToken && <button onClick={logoutUser}>deconnecter</button>}
-      </div>
-    </nav>
+    <Box
+      display="flex"
+      justifyContent="space-around"
+      backgroundColor="teal.500"
+      fontSize="1.7rem"
+      p={4}
+      alignItems="center"
+    >
+      <Heading as="h2" mr={2} fontSize="x2" color="white">
+        Crealead todo
+      </Heading>
+      {token && (
+        <Button onClick={logoutUser} variantColor="red">
+          Logout
+        </Button>
+      )}
+    </Box>
   );
 };
 

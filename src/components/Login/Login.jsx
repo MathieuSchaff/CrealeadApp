@@ -1,135 +1,99 @@
-import React, { useState, useRef, useEffect, FC } from "react";
-import "./Login.scss";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import { useAppDispatch } from "../../app/hooks";
-import { setToken } from "../auth/authSlice";
-import { useLoginMutation } from "./loginApiSlice";
-import CustomField from "./CustomField";
-import "./Login.scss";
-import { Formik, Form, Field, FormikHelpers } from "formik";
+import { Box, Button, VStack, Flex, Text } from "@chakra-ui/react";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import Spinner from "../../components/Spinner/Spinner";
-
+import Coopernet from "../../utils/Coopernet";
+import CustomField from "./CustomField";
 const validationSchema = Yup.object({
-  email: Yup.string().email("Invalid email address").required("Required"),
+  username: Yup.string()
+    .min(5, "Must be 5 characters atleast ")
+    .required("Required"),
   password: Yup.string()
     .min(5, "Must be 5 characters atleast ")
     .required("Required"),
-  rememberMe: Yup.boolean().required(),
 });
 const initialValues = {
-  email: "",
-  rememberMe: false,
+  username: "",
   password: "",
 };
+// schaff.mathieu
 const Login = ({ handleToogle }) => {
-  //REACT ROUTER DOM
   const navigate = useNavigate();
-
-  // DOM REFS
-  const formContainer = useRef(null);
-  const errRef = useRef(null);
-
-  const [spinner, setSpinner] = useState(false);
-  // error catched
-  const [errorMsg, setErrorMsg] = useState("");
-
+  const [errLogin, setErrLogin] = useState(false);
   const submitButton = async (values, helpers) => {
-    setErrorMsg("");
-    setSpinner(true);
-
     try {
-      const tokenResponse = await futureLogin();
-
-      if (tokenResponse) {
-      } else {
-        throw new Error("la tete a toto");
+      Coopernet.setUsername(values.username);
+      Coopernet.setPassword(values.password);
+      await Coopernet.setOAuthToken();
+      console.log(Coopernet.oauth);
+      if (JSON.stringify(Coopernet.oauth) === "{}") {
+        throw new Error("Username or Password incorrect");
       }
-
-      handleToogle();
-      // navigate("/profile");
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMsg("An unexpected error occurred");
-        errRef?.current?.focus();
-        return "An unexpected error occurred";
-        // 👉️ err is type Error here
-      } else {
-        setErrorMsg(error);
-        errRef?.current?.focus();
-      }
+      navigate("/");
+    } catch (err) {
+      console.log("error", err);
+      setErrLogin(true);
     } finally {
       helpers.resetForm();
       helpers.setSubmitting(false);
-      setSpinner(false);
     }
   };
 
   return (
-    <main className="main bg-dark modal-sign-in">
-      <section className="sign-in-content" ref={formContainer}>
-        <FontAwesomeIcon icon={faCircleUser} id="user__svg" />
-        <h1>Sign In</h1>
+    <Flex bg="gray.100" align="center" justify="center" h="100vh">
+      <Box bg="white" p={6} rounded="md" w={64}>
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
           onSubmit={submitButton}
-          validateOnMount
+          validationSchema={validationSchema}
         >
-          {({ isSubmitting, dirty, isValid, handleBlur }) => {
-            return (
-              <Form>
-                {errorMsg && (
-                  <p ref={errRef} className="errmsg">
-                    {errorMsg}
-                  </p>
+          {({ isSubmitting }) => (
+            <Form>
+              <VStack spacing={4} align="flex-start">
+                <Field
+                  name="username"
+                  id="username"
+                  type="text"
+                  placeholder="username"
+                  component={CustomField}
+                  variant="filled"
+                />
+                <Field
+                  name="password"
+                  id="password"
+                  type="text"
+                  placeholder="password"
+                  component={CustomField}
+                  variant="filled"
+                />
+                {errLogin && (
+                  <Text color="red.400" fontSize="md">
+                    Username or Password incorrect
+                  </Text>
                 )}
-                {spinner ? (
-                  <Spinner />
-                ) : (
-                  <>
-                    <Field
-                      id="email"
-                      name="email"
-                      type="email"
-                      component={CustomField}
-                      label="Email"
-                      onBlur={handleBlur}
-                    />
-                    <Field
-                      id="password"
-                      name="password"
-                      type="password"
-                      component={CustomField}
-                      label="Password"
-                      autoComplete="on"
-                      onBlur={handleBlur}
-                    />
-                    <div className="input-remember">
-                      <Field
-                        type="checkbox"
-                        id="rememberMe"
-                        name="rememberMe"
-                      />
-                      <label htmlFor="rememberMe">Remember me</label>
-                    </div>
-                    <button
-                      className="sign-in-button"
-                      type="submit"
-                      disabled={!(dirty && isValid) || isSubmitting}
-                    >
-                      Submit
-                    </button>
-                  </>
-                )}
-              </Form>
-            );
-          }}
+
+                <Button
+                  className="sign-in-button"
+                  type="submit"
+                  bg="teal"
+                  color="white"
+                  border="2px"
+                  borderColor="teal.500"
+                  _hover={{
+                    background: "#fff",
+                    color: "teal.500",
+                  }}
+                  isLoading={isSubmitting}
+                >
+                  Submit
+                </Button>
+              </VStack>
+            </Form>
+          )}
         </Formik>
-      </section>
-    </main>
+      </Box>
+    </Flex>
   );
 };
 
