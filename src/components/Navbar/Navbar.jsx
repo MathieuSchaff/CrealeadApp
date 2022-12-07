@@ -17,6 +17,7 @@ const Navbar = () => {
       fontSize="1.7rem"
       p={4}
       alignItems="center"
+      h="70px"
     >
       <Heading as="h2" mr={2} fontSize="x2" color="white">
         Crealead todo

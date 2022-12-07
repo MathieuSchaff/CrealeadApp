@@ -7,7 +7,7 @@ import Login from "./components/Login/Login";
 import HomePageTodos from "./components/Todos/HomePageTodos";
 function App() {
   return (
-    <div className="App">
+    <div>
       <Router>
         <Navbar />
         <Routes>

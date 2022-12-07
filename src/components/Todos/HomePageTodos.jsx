@@ -6,7 +6,6 @@ import { TodoListItem } from "./TodoListItem";
 import { TodoForm } from "./TodoForm";
 import { useQuery, useMutation } from "react-query";
 function HomePageTodos() {
-  const [sortedTodos, setSortedTodos] = useState([]);
   const vStackProps = {
     p: "4",
     w: "100%",
@@ -24,13 +23,6 @@ function HomePageTodos() {
   } = useQuery("todos", async () => Coopernet.getTasks(), {
     initialData: [],
   });
-  console.log("todos", todos);
-  // useEffect(() => {
-  //   const todos1 = todos.filter((todo) => todo.isValidate === "0");
-  //   const todos2 = todos.filter((todo) => todo.isValidate === "1");
-  //   setSortedTodos([todos1, todos2]);
-  //   console.log(sortedTodos);
-  // }, [sortedTodos, todos]);
 
   return (
     <VStack alignItems="center" mt={2}>
@@ -48,8 +40,8 @@ function HomePageTodos() {
           <Text>Faites</Text>
           {todos
             .filter((todo) => todo.isValidate === "1")
-            .map((todo, i) => (
-              <TodoListItem todo={todo} indexKey={Number(todo.uid) + i} />
+            .map((todo) => (
+              <TodoListItem todo={todo} indexKey={todo.id} />
             ))}
         </VStack>
       )}
@@ -58,7 +50,7 @@ function HomePageTodos() {
           <Text>A faire</Text>
           {todos
             .filter((todo) => todo.isValidate === "0")
-            .map((todo, i) => (
+            .map((todo) => (
               <TodoListItem todo={todo} indexKey={todo.id} />
             ))}
         </VStack>

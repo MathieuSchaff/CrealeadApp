@@ -5,12 +5,13 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Coopernet from "../../utils/Coopernet";
 import CustomField from "./CustomField";
+import "./login.css";
 const validationSchema = Yup.object({
   username: Yup.string()
-    .min(5, "Must be 5 characters atleast ")
+    .min(3, "Must be 5 characters atleast ")
     .required("Required"),
   password: Yup.string()
-    .min(5, "Must be 5 characters atleast ")
+    .min(3, "Must be 5 characters atleast ")
     .required("Required"),
 });
 const initialValues = {
@@ -41,7 +42,13 @@ const Login = ({ handleToogle }) => {
   };
 
   return (
-    <Flex bg="gray.100" align="center" justify="center" h="100vh">
+    <Flex
+      bg="gray.100"
+      align="center"
+      justify="center"
+      height={{ base: "100%", sm: "50%", md: "25%" }}
+      className="flex-login"
+    >
       <Box bg="white" p={6} rounded="md" w={64}>
         <Formik
           initialValues={initialValues}
