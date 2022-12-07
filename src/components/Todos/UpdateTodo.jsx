@@ -20,11 +20,14 @@ import { FiEdit } from "react-icons/fi";
 import { useMutation, useQueryClient } from "react-query";
 import Coopernet from "../../utils/Coopernet";
 function UpdateTodo({ todo }) {
-  const [checkedItem, setCheckedItem] = React.useState(
-    todo.isValidate ?? false
+  console.log(" todo.isValidate", typeof todo.isValidate);
+  const [checked, setChecked] = useState(
+    todo.isValidate === "1" ? true : false
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState({
+    ...todo,
+  });
 
   const initialRef = React.useRef();
 
@@ -50,18 +53,19 @@ function UpdateTodo({ todo }) {
   };
 
   const handleDescription = (e) => {
-    modifyTodo({ ...body, description: e.target.value });
+    setBody({ ...body, description: e.target.value });
   };
   const handleDate = (e) => {
-    modifyTodo({ ...body, ended: e.target.value });
+    setBody({ ...body, ended: e.target.value });
   };
   const handleLabel = (e) => {
-    modifyTodo({ ...body, label: e.target.value });
+    setBody({ ...body, label: e.target.value });
   };
-  const handleValidate = (e) => {
-    setCheckedItem(e.target.checked);
-    const validate = checkedItem === false ? "0" : "1";
-    modifyTodo({ ...body, isValidate: validate });
+  const handleChange = (e) => {
+    setChecked(e.target.checked);
+    const validate = checked === false ? "0" : "1";
+    console.log(validate);
+    setBody({ ...body, isValidate: validate });
   };
   return (
     <>
@@ -87,7 +91,7 @@ function UpdateTodo({ todo }) {
                     ref={initialRef}
                     placeholder="Enter your task"
                     defaultValue={todo.description}
-                    onChange={(e) => handleDescription(e.target.value)}
+                    onChange={(e) => handleDescription(e)}
                   />
                 </FormControl>
                 <FormControl>
@@ -114,10 +118,7 @@ function UpdateTodo({ todo }) {
                 <FormControl>
                   <FormLabel>Is your task done? </FormLabel>
 
-                  <Checkbox
-                    onChange={(e) => handleValidate(e)}
-                    isChecked={checkedItem}
-                  />
+                  <Checkbox checked={checked} onChange={handleChange} />
                 </FormControl>
               </ModalBody>
 
